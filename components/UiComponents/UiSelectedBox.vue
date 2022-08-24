@@ -32,24 +32,24 @@
                         <span class="intx">ㆍ{{ name }}</span>
                     </div>
                     <div class="jbcots">
-                        <FormRow class="FLEX ALIGN_ITEM_CENTER">
-                            <FormCol class="col00" style="width: 200px">
-                                <FormInput :name="code" :model-value="rate" type="number" placeholder="점수입력" @update:modelValue="(e) => this.$emit('update:modelValue', e)" />
-                            </FormCol>
-                            <FormCol class="col00">
+                        <LayoutRow class="FLEX ALIGN_ITEM_CENTER">
+                            <LayoutCol class="col00" style="width: 200px">
+                                <FormInput :name="code" :value="rate" type="number" placeholder="점수입력" @update:input="(e) => $emit('update:modelValue', e)" />
+                            </LayoutCol>
+                            <LayoutCol class="col00">
                                 <span class="jbStatText MR45">급(점) 이상</span>
-                            </FormCol>
-                            <FormCol class="col00">
+                            </LayoutCol>
+                            <LayoutCol class="col00">
                                 <FormRadioGroup>
                                     <FormRadio :name="`reqRdo_${code}`" :defaultChecked="required" label="필수" />
                                     <div style="width: 10px"></div>
                                     <FormRadio :name="`reqRdo_${code}`" :defaultChecked="!required" label="우대" />
                                 </FormRadioGroup>
-                            </FormCol>
-                            <FormCol class="col00">
+                            </LayoutCol>
+                            <LayoutCol class="col00">
                                 <button class="jbls_de" :value="code" :name="name" title="삭제" @click="$emit('click:jumsuListDelete', $event)"></button>
-                            </FormCol>
-                        </FormRow>
+                            </LayoutCol>
+                        </LayoutRow>
                     </div>
                 </div>
                 <!-- foreach:E -->

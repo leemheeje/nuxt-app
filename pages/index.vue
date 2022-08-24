@@ -1,17 +1,18 @@
 <template>
     <div>
         {{text|testfilter}}
-		<button @click="asdfavwxE">button</button>
+
+		<button @click="asdfavwxE">{{d}}</button>
 		<nuxt-link :to="{ path: '/jobpost/recruitment'}">asdf</nuxt-link>
     </div>
 </template>
 <script>
 
 export default {
-	// async asyncData({$axios}){
-	// 	const aa = await $axios.$get('/api');
-	// 	console.dir(aa);
-	// },
+	async asyncData({$axios}){
+		let d = (process.server ? '서버' : '클라이언트')+Math.random()
+		return {d}
+	},
 	data : ()=>{
 		return {
 			text : 1
@@ -24,7 +25,7 @@ export default {
 			// 	console.log(data)
 			// })
 			this.$axios.get('/api').then(data=>{
-				console.log(data)
+				// console.log(data)
 			})
 		}
 	}

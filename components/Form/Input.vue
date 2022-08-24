@@ -7,7 +7,7 @@
             :placeholder="placeholder"
             :name="name"
             :value="value"
-            @input="$emit('update:modelValue', $event.target.value)"
+            @input="$emit('update:input', $event)"
             v-bind="$attrs"
         />
         <slot name="inl" />

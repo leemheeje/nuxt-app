@@ -1,6 +1,6 @@
 <template>
     <div class="asTps">
-        <input :id="id" type="checkbox" class="HIDDEN" :name="name" :value="code" :data-label="dataLabel" v-bind="$attrs" />
+        <input :id="id" type="checkbox" class="HIDDEN" :name="name" :value="code" :data-label="dataLabel" @change="$emit('update:change', $event)" v-bind="$attrs" />
         <label :for="id" v-html="nameEncKeyword"> </label>
     </div>
 </template>

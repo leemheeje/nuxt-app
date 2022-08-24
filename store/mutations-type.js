@@ -1,4 +1,5 @@
-
+//auth
+export const SET_AUTH = 'SET_AUTH';
 
 //jobpost - 모집분야
 //공고등록 관련 선택하기

@@ -1,7 +1,7 @@
 <template>
     <div :class="`jbForm ${cssClass}`">
         <label>
-            <input type="radio" id="" name="" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" v-bind="$attrs" />
+            <input type="radio" id="" name="" :value="value" @change="$emit('update:change', $event)" v-bind="$attrs" />
             <span class="lb">{{ label }}</span>
         </label>
     </div>
@@ -12,6 +12,7 @@ export default {
     inheritAttrs: false,
     props: {
         label: "",
+        value: "",
         modelValue: {},
         cssClass: {
             type: String,

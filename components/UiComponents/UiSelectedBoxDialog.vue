@@ -109,12 +109,11 @@ export default {
             default: false,
         },
         selectLists: {
-            type: Array,
+            type: [Array, Object],
             default: () => [],
-            required: true,
         },
         selectedLists: {
-            type: Array,
+            type: [Array, Object],
             default: () => [],
         },
         isDialogHeader: {
@@ -145,6 +144,5 @@ export default {
             }
         },
     },
-    created() {},
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="jbForm">
-        <select :value="modelValue" id="" @change="$emit('update:modelValue', $event.target.value)" name="" v-bind="$attrs">
+        <select :value="value" :id="id" @change="$emit('update:change', $event)" :name="name" v-bind="$attrs">
             <slot />
         </select>
     </div>
@@ -9,7 +9,7 @@
 <script>
 export default {
     inheritAttrs: false,
-    props: ["modelValue", "vModel"],
+    props: ["modelValue", "vModel", "value", "name", "id"],
     created() {},
 };
 </script>

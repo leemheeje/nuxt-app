@@ -25,10 +25,10 @@
                     <LayoutRowLayout title="모집분야" class="MT40" required>
                         <LayoutRow>
                             <LayoutCol class="col7">
-                                <FormInput :value="mzby_title" @update:modelValue="(value) => SET_MOZIPBUNYA_TITLE(value)" placeholder="EX) R&D, 경영지원" />
+                                <FormInput :value="mzby_title" @update:input="(e) => SET_MOZIPBUNYA_TITLE(e.target.value)" placeholder="EX) R&D, 경영지원" />
                             </LayoutCol>
                             <LayoutCol class="col3 inline FLEX ALIGN_ITEM_CENTER" style="width: 150px">
-                                <FormInput value="0" />
+                                <FormInput :value="mzby_length" @update:input="(e) => SET_MOZIPBUNYA_LENGTH(e.target.value)" />
                                 <span class="jbStatText ML10 NOWRAP">명 모집</span>
                             </LayoutCol>
                         </LayoutRow>
@@ -38,34 +38,45 @@
                     <LayoutRowLayout title="경력여부" class="MT35" required>
                         <LayoutRow class="FLEX ALIGN_ITEM_CENTER">
                             <LayoutCol style="width: 100px">
-                                <FormCheckbox size="default">신입</FormCheckbox>
+                                <FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_NEWCOMER(e.target.checked)" :checked="mzby_newcomer">신입</FormCheckbox>
                             </LayoutCol>
                             <LayoutCol style="width: 100px">
-                                <FormCheckbox size="default">경력</FormCheckbox>
+                                <FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_CAREER(e.target.checked)" :checked="mzby_career">경력</FormCheckbox>
                             </LayoutCol>
                             <LayoutCol style="width: 200px">
-                                <FormSelect>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
+                                <FormSelect :value="mzby_career_range" @update:change="(e) => SET_MOZIPBUNYA_CAREER_RANGE(e.target.value)">
+                                    <option value="">년차</option>
+                                    <option :value="item" v-for="(item, index) in [...new Array(15)].map((t, i) => i + 1)" :key="index">{{ item }}년차</option>
+                                    <option value="99">15년차 이상</option>
                                 </FormSelect>
                             </LayoutCol>
                             <LayoutCol class="ML20">
-                                <FormCheckbox size="default">경력무관</FormCheckbox>
+                                <FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_CAREER_ABSOLUTE(e.target.checked)" :checked="mzby_career_absolute"
+                                    >경력무관</FormCheckbox
+                                >
                             </LayoutCol>
                         </LayoutRow>
                     </LayoutRowLayout>
                     <!-- 경력여부:E -->
                     <!-- 담당업무:S -->
                     <LayoutRowLayout title="담당업무" class="MT35">
-                        <FormInput placeholder="담당업무를 자세히 기재할수록 지원율이 높아집니다." />
+                        <FormInput
+                            placeholder="담당업무를 자세히 기재할수록 지원율이 높아집니다."
+                            :value="mzby_respons"
+                            @update:input="(e) => SET_MOZIPBUNYA_RESPONS(e.target.value)"
+                        />
                     </LayoutRowLayout>
                     <!-- 담당업무:E -->
                     <!-- 근무부서:S -->
                     <LayoutRowLayout title="근무부서" class="MT20">
                         <LayoutRow>
                             <LayoutCol class="col6">
-                                <FormInput type="text" placeholder="근무 부서명을 입력해 주세요." id="" name="" value="" />
+                                <FormInput
+                                    type="text"
+                                    placeholder="근무 부서명을 입력해 주세요."
+                                    :value="mzby_partname"
+                                    @update:input="(e) => SET_MOZIPBUNYA_PARTNAME(e.target.value)"
+                                />
                             </LayoutCol>
                         </LayoutRow>
                     </LayoutRowLayout>
@@ -170,7 +181,7 @@
         <!-- 모집분야 토글영역:E -->
 
         <!-- 모집분야 추가 버튼:S -->
-        <button class="jbSectAddButton MT20" @click="test">+모집분야 추가</button>
+        <button class="jbSectAddButton MT20" @click="test">+target: 'static', mode: 'universal', 추가</button>
 
         <!-- 모집분야 추가 버튼:E -->
     </div>
@@ -191,28 +202,34 @@ import {
     SET_JOBPOST_UNSELETED,
 } from "~/store/mutations-type";
 import { jobpost } from "~/mixins";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
+    name: "recruitment",
     async asyncData({ $api }) {
         let mzby_jc_favorite = null;
         let mzby_jg_favorite = null;
-        const mzby_jc = await $api.static_api("jc").then(({ data }) => {
-            mzby_jc_favorite = data.favorite;
-            return data;
-        });
-        const mzby_jg = await $api.static_api("jg").then(({ data }) => {
-            mzby_jg_favorite = data.favorite;
-            return data;
-        });
-        const mzby_woodae = await $api.static_api("woodae").then(({ data }) => data);
+        let mzby_jc = null;
+        let mzby_jg = null;
+        let mzby_woodae = null;
+        try {
+            mzby_jc = await $api.static_api("jc").then(({ data }) => {
+                mzby_jc_favorite = data.favorite;
+                return data;
+            });
+            mzby_jg = await $api.static_api("jg").then(({ data }) => {
+                mzby_jg_favorite = data.favorite;
+                return data;
+            });
+            mzby_woodae = await $api.static_api("woodae").then(({ data }) => data);
+        } catch (er) {}
         return { mzby_jc, mzby_jg, mzby_woodae, mzby_jc_favorite, mzby_jg_favorite };
     },
-    // async validate({store}){
-    // 	console.dir(`store.state.jobpost.mzby_title---------`);
-    // 	console.dir();
-    // 	return store.state.jobpost.mzby_title
-    // },
     created() {},
+    mounted() {
+        this.getSession({
+            data: window.localStorage.getItem(this.$options.name),
+        });
+    },
     data() {
         return {
             mzby_tooltip_isvisible: false,
@@ -258,6 +275,9 @@ export default {
             [SET_JOBPOST_SELETED]: `jobpost/${SET_JOBPOST_SELETED}`,
             [SET_JOBPOST_UNSELETED]: `jobpost/${SET_JOBPOST_UNSELETED}`,
         }),
+        ...mapActions({
+            getSession: `jobpost/getSession`,
+        }),
         jcjgbind(event) {
             this.SET_JOBPOST_SELETED({
                 event,
@@ -282,7 +302,7 @@ export default {
         },
         test() {
             window.localStorage.setItem(
-                "asd",
+                this.$options.name,
                 JSON.stringify({
                     mzby_title: this.mzby_title,
                     mzby_length: this.mzby_length,
@@ -296,22 +316,23 @@ export default {
                     mzby_woodae_selected: this.mzby_woodae_selected,
                 })
             );
+            this.$router.push({ path: "/jobpost/eligibility" });
         },
     },
     mixins: [jobpost],
-    //  layout: "jobpost",
-    layout({ store }) {
-        if (process.client) {
-        // if (true) {
-            // console.log("localStorage?", );
-            console.log("store sdfssdfsdfdf?", store);
-			let aa = JSON.parse(window.localStorage.getItem('asd'));
-			store.commit(`jobpost/${SET_MOZIPBUNYA_TITLE}`, aa.mzby_title)
-            for (let key in aa) {
-                //store.state.jobpost[key] = aa[key];
-            }
-        }
-        return "jobpost";
-    },
+    layout: "default_jobpost",
+    // layout({ store }) {
+    //     // if (process.client) {
+    //     // // if (true) {
+    //     //     // console.log("localStorage?", );
+    //     //     console.log("store sdfssdfsdfdf?", store);
+    //     // 	let aa = JSON.parse(window.localStorage.getItem('asd'));
+    //     // 	store.commit(`jobpost/${SET_MOZIPBUNYA_TITLE}`, aa.mzby_title)
+    //     //     for (let key in aa) {
+    //     //         //store.state.jobpost[key] = aa[key];
+    //     //     }
+    //     // }
+    //     return "jobpost";
+    // },
 };
 </script>
