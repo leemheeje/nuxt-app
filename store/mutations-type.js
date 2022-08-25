@@ -6,6 +6,8 @@ export const SET_AUTH = 'SET_AUTH';
 export const SET_JOBPOST_SELETED = 'SET_JOBPOST_SELETED';
 //공고등록 관련 삭제하기
 export const SET_JOBPOST_UNSELETED = 'SET_JOBPOST_UNSELETED';
+//공고등록 선택된 항목 셋팅
+export const SET_JOBPOST_OBJECT_MERGE = 'SET_JOBPOST_OBJECT_MERGE';
 
 //모집분야 타이틀
 export const SET_MOZIPBUNYA_TITLE = 'SET_MOZIPBUNYA_TITLE';

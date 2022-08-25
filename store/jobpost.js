@@ -9,6 +9,7 @@ import {
 	SET_MOZIPBUNYA_PARTNAME,
 	SET_JOBPOST_SELETED,
 	SET_JOBPOST_UNSELETED,
+	SET_JOBPOST_OBJECT_MERGE,
 
 	SET_ZIWON_EDUCATION_SELECT,
 	SET_ZIWON_EDUCATION_INPUT,
@@ -98,23 +99,30 @@ export const mutations = {
 	[SET_JOBPOST_UNSELETED](state, { code, selected }) {
 		state[selected] = state[selected].filter((object) => object.code !== code);
 	},
+	[SET_JOBPOST_OBJECT_MERGE](state, payload) {
+		if (typeof payload === 'object') {
+			for (let key in payload) {
+				state[key] = payload[key];
+			}
+		}
+	},
 	[SET_MOZIPBUNYA_TITLE](state, payload) {
 		state.mzby_title = payload;
 	},
 	[SET_MOZIPBUNYA_LENGTH](state, payload) {
 		state.mzby_length = payload;
 	},
-	[SET_MOZIPBUNYA_NEWCOMER](state, { target }) {
-		state.mzby_newcomer = target.checked;
+	[SET_MOZIPBUNYA_NEWCOMER](state, payload) {
+		state.mzby_newcomer = payload;
 	},
-	[SET_MOZIPBUNYA_CAREER](state, { target }) {
-		state.mzby_career = target.checked;
+	[SET_MOZIPBUNYA_CAREER](state, payload) {
+		state.mzby_career = payload;
 	},
 	[SET_MOZIPBUNYA_CAREER_RANGE](state, payload) {
 		state.mzby_career_range = payload;
 	},
-	[SET_MOZIPBUNYA_CAREER_ABSOLUTE](state, { target }) {
-		state.mzby_career_absolute = target.checked;
+	[SET_MOZIPBUNYA_CAREER_ABSOLUTE](state, payload) {
+		state.mzby_career_absolute = payload;
 	},
 	[SET_MOZIPBUNYA_RESPONS](state, payload) {
 		state.mzby_respons = payload;
@@ -176,20 +184,21 @@ export const mutations = {
 	[SET_WKCOND_WORK_ISHOMEWORK](state, payload) {
 		state.wkcond_work_ishomework = payload;
 	},
-	setMoxipbunyaSession(state, payload) {
-		if (typeof payload === 'object') {
-			for (let key in payload) {
-				state[key] = payload[key];
-			}
-		}
-	},
+	
+	// setMoxipbunyaSession(state, payload) {
+	// 	if (typeof payload === 'object') {
+	// 		for (let key in payload) {
+	// 			state[key] = payload[key];
+	// 		}
+	// 	}
+	// },
 	setSearchSubwaykey(state, payload) {
 		state.wkcond_work_isglobal = payload;
 	}
 }
 
 export const actions = {
-	getSession({ commit }, {data,commit_name = 'setMoxipbunyaSession' }) {
+	getSession({ commit }, { data, commit_name = SET_JOBPOST_OBJECT_MERGE }) {
 		return new Promise((resolve, reject) => {
 			let _d = data;
 			let _data = undefined;

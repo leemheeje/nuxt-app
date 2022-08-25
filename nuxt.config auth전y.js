@@ -35,7 +35,10 @@ module.exports = {
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
 		'~/plugins/filters.js',
+		// '~/plugins/axios.js',
+		// '~/plugins/request.js',
 		'~/plugins/api.js',
+		//'~/plugins/google.js',
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components
@@ -57,7 +60,7 @@ module.exports = {
 		// https://go.nuxtjs.dev/axios
 		'@nuxtjs/axios',
 		'cookie-universal-nuxt',
-		'@nuxtjs/auth-next',
+		// '@nuxtjs/auth-next',
 	],
 
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -68,11 +71,26 @@ module.exports = {
 		// baseURL: 'http://localhost:5500',
 
 	},
+	// proxy: {
+	// 	'/api': { target: 'http://localhost:5500', pathRewrite: { '^/api/': '' } }
+	// },
 
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
 	},
+	// serverMiddleware: [{ path: '/api', handler: '~/api/index.js' }],
+	// auth: {
+	// 	strategies: {
+	// 		google: {
+	// 			clientId: process.env.GOOGLE_OAUTH_CLIENTKEY,
+	// 			codeChallengeMethod: '',
+	// 			responseType: 'token id_token',
+	// 			// redirectUri: 'http://localhost:3000/accounts/google/login/callback/'
+	// 			redirectUri: 'http://localhost:3000'
+	// 		},
+	// 	}
+	// },
 	env: {
 		SUBWAY_INFO_KEY: process.env.SUBWAY_INFO_KEY,
 		API_URL: process.env.API_URL,

@@ -1,8 +1,24 @@
 export default ({ app: { $axios } }, inject) => {
-	inject('api', {
-		static_api(filename = '') {
-			return $axios.get(`/static_api/${filename}.json`);
-		}
-		//asdf : 1
+	$axios.defaults.baseURL = process.env.API_URL
+	const staticApi = 'static_api'
+	inject('staticApi', {
+		jc() {
+			return $axios.get(`/${staticApi}/jc.json`);
+		},
+		jg() {
+			return $axios.get(`/${staticApi}/jg.json`);
+		},
+		woodae() {
+			return $axios.get(`/${staticApi}/woodae.json`);
+		},
+		langage() {
+			return $axios.get(`/${staticApi}/langage.json`);
+		},
+		license() {
+			return $axios.get(`/${staticApi}/license.json`);
+		},
+		woodaeUnivers() {
+			return $axios.get(`/${staticApi}/woodae_univers.json`);
+		},
 	})
 }

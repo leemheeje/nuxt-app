@@ -181,8 +181,7 @@
         <!-- 모집분야 토글영역:E -->
 
         <!-- 모집분야 추가 버튼:S -->
-        <button class="jbSectAddButton MT20" @click="test">+target: 'static', mode: 'universal', 추가</button>
-
+        <button class="jbSectAddButton MT20" @click="test">+targ12311et: 'st3atic', mode: 'universal', 추가</button>
         <!-- 모집분야 추가 버튼:E -->
     </div>
     <!-- 모집분야:E -->
@@ -200,36 +199,13 @@ import {
     SET_MOZIPBUNYA_PARTNAME,
     SET_JOBPOST_SELETED,
     SET_JOBPOST_UNSELETED,
+    SET_JOBPOST_OBJECT_MERGE,
 } from "~/store/mutations-type";
 import { jobpost } from "~/mixins";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
     name: "recruitment",
-    async asyncData({ $api }) {
-        let mzby_jc_favorite = null;
-        let mzby_jg_favorite = null;
-        let mzby_jc = null;
-        let mzby_jg = null;
-        let mzby_woodae = null;
-        try {
-            mzby_jc = await $api.static_api("jc").then(({ data }) => {
-                mzby_jc_favorite = data.favorite;
-                return data;
-            });
-            mzby_jg = await $api.static_api("jg").then(({ data }) => {
-                mzby_jg_favorite = data.favorite;
-                return data;
-            });
-            mzby_woodae = await $api.static_api("woodae").then(({ data }) => data);
-        } catch (er) {}
-        return { mzby_jc, mzby_jg, mzby_woodae, mzby_jc_favorite, mzby_jg_favorite };
-    },
-    created() {},
-    mounted() {
-        this.getSession({
-            data: window.localStorage.getItem(this.$options.name),
-        });
-    },
+	middleware: 'jobpost',
     data() {
         return {
             mzby_tooltip_isvisible: false,
@@ -238,6 +214,19 @@ export default {
             isWoodaeDialogVisible: false,
         };
     },
+    async asyncData({ $staticApi }) {
+        const mzby_jc = await $staticApi.jc().then(({ data }) => data);
+        const mzby_jg = await $staticApi.jg().then(({ data }) => data);
+        const mzby_woodae = await $staticApi.woodae().then(({ data }) => data);
+        return {
+            mzby_jc,
+            mzby_jg,
+            mzby_woodae,
+        };
+    },
+    async mounted() {
+    },
+
     computed: {
         ...mapState({
             mzby_title: (state) => state.jobpost.mzby_title,
@@ -252,14 +241,14 @@ export default {
             mzby_woodae_selected: (state) => state.jobpost.mzby_woodae_selected,
         }),
         favoriteItemsArrayJcJg() {
-            if (this.mzby_jc_favorite && this.mzby_jg_favorite) {
-                return [...this.mzby_jc_favorite, ...this.mzby_jg_favorite];
+            if (this.mzby_jc && this.mzby_jg) {
+                return [...this.mzby_jc.favorite, ...this.mzby_jg.favorite];
             } else {
                 return false;
             }
         },
         favoriteItemsArrayWoodae() {
-            return this.__fnComputeFavorite("mzby_woodae");
+            if (this.mzby_woodae) return this.__fnComputeFavorite("mzby_woodae");
         },
     },
     methods: {
@@ -274,6 +263,7 @@ export default {
             [SET_MOZIPBUNYA_PARTNAME]: `jobpost/${SET_MOZIPBUNYA_PARTNAME}`,
             [SET_JOBPOST_SELETED]: `jobpost/${SET_JOBPOST_SELETED}`,
             [SET_JOBPOST_UNSELETED]: `jobpost/${SET_JOBPOST_UNSELETED}`,
+            [SET_JOBPOST_OBJECT_MERGE]: `jobpost/${SET_JOBPOST_OBJECT_MERGE}`,
         }),
         ...mapActions({
             getSession: `jobpost/getSession`,
@@ -301,7 +291,8 @@ export default {
             this[SET_JOBPOST_UNSELETED]({ code, selected: "mzby_woodae_selected" });
         },
         test() {
-            window.localStorage.setItem(
+            // window.localStorage.setItem(
+			this.$cookies.set(
                 this.$options.name,
                 JSON.stringify({
                     mzby_title: this.mzby_title,
@@ -321,18 +312,5 @@ export default {
     },
     mixins: [jobpost],
     layout: "default_jobpost",
-    // layout({ store }) {
-    //     // if (process.client) {
-    //     // // if (true) {
-    //     //     // console.log("localStorage?", );
-    //     //     console.log("store sdfssdfsdfdf?", store);
-    //     // 	let aa = JSON.parse(window.localStorage.getItem('asd'));
-    //     // 	store.commit(`jobpost/${SET_MOZIPBUNYA_TITLE}`, aa.mzby_title)
-    //     //     for (let key in aa) {
-    //     //         //store.state.jobpost[key] = aa[key];
-    //     //     }
-    //     // }
-    //     return "jobpost";
-    // },
 };
 </script>

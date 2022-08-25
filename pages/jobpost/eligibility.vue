@@ -420,23 +420,14 @@ import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
     name: "eligibility",
-    async asyncData({ $api }) {
-        let langage = null;
-        let license = null;
-        let keywordData = null;
-        let woodaeUni = null;
-        try {
-            langage = await $api.static_api("langage").then(({ data }) => data);
-            license = await $api.static_api("license").then(({ data }) => {
-                keywordData = data.data;
-                return data;
-            });
-            woodaeUni = await $api.static_api("langage").then(({ data }) => data);
-        } catch (error) {}
+    middleware: "jobpost",
+    async asyncData({ $staticApi }) {
+        const langage = await $staticApi.langage().then(({ data }) => data);
+        const license = await $staticApi.license().then(({ data }) => data);
+        const woodaeUni = await $staticApi.woodaeUnivers().then(({ data }) => data);
         return {
             langage,
             license,
-            keywordData,
             woodaeUni,
         };
     },
@@ -456,28 +447,13 @@ export default {
             keyword: "",
             //연령제한
             ziwonAgeArray: [
-                {
-                    label: "연령무관",
-                    value: "1",
-                },
-                {
-                    label: "연령제한",
-                    value: "99",
-                },
+                { label: "연령무관", value: "1" },
+                { label: "연령제한", value: "99" },
             ],
             ziwonJenderArray: [
-                {
-                    label: "성별무관",
-                    value: "99",
-                },
-                {
-                    label: "남자",
-                    value: "man",
-                },
-                {
-                    label: "여자",
-                    value: "woman",
-                },
+                { label: "성별무관", value: "99" },
+                { label: "남자", value: "man" },
+                { label: "여자", value: "woman" },
             ],
             //성차별법금지 팝업visible
             ediDialogVisible001: false,
@@ -509,13 +485,12 @@ export default {
                 return [];
             }
         },
+        keywordData() {
+            return this.license.data;
+        },
     },
     created() {},
-    mounted() {
-        this.getSession({
-            data: window.localStorage.getItem(this.$options.name),
-        });
-    },
+    mounted() {},
     methods: {
         ...mapMutations({
             [SET_JOBPOST_SELETED]: `jobpost/${SET_JOBPOST_SELETED}`,
@@ -563,7 +538,8 @@ export default {
             console.log(e);
         },
         test() {
-            window.localStorage.setItem(
+            // window.localStorage.setItem(
+            this.$cookies.set(
                 this.$options.name,
                 JSON.stringify({
                     ziwon_hckGubun: this.ziwon_hckGubun,
