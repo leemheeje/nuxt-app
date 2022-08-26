@@ -45,11 +45,16 @@
                 <!-- foreach:E -->
             </div>
         </div>
+		{{$store.state.isAuth ? $store.state.user:''}}님
     </div>
 </template>
 
 <script>
-export default {};
+export default {
+	mounted(){
+		console.log(this.$store);
+	}
+};
 </script>
 
 <style>

@@ -1,24 +1,25 @@
 export default ({ app: { $axios } }, inject) => {
-	$axios.defaults.baseURL = process.env.API_URL
+	// $axios.defaults.baseURL = process.env.API_URL
 	const staticApi = 'static_api'
+	const _baseURL = process.env.API_URL
 	inject('staticApi', {
 		jc() {
-			return $axios.get(`/${staticApi}/jc.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/jc.json`);
 		},
 		jg() {
-			return $axios.get(`/${staticApi}/jg.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/jg.json`);
 		},
 		woodae() {
-			return $axios.get(`/${staticApi}/woodae.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/woodae.json`);
 		},
 		langage() {
-			return $axios.get(`/${staticApi}/langage.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/langage.json`);
 		},
 		license() {
-			return $axios.get(`/${staticApi}/license.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/license.json`);
 		},
 		woodaeUnivers() {
-			return $axios.get(`/${staticApi}/woodae_univers.json`);
+			return $axios.get(`${_baseURL}/${staticApi}/woodae_univers.json`);
 		},
 	})
 }

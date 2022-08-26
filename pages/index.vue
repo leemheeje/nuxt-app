@@ -4,6 +4,7 @@
 
 		<button @click="asdfavwxE">{{d}}</button>
 		<nuxt-link :to="{ path: '/jobpost/recruitment'}">asdf</nuxt-link>
+		<button @click="logout">logout</button>
     </div>
 </template>
 <script>
@@ -27,7 +28,12 @@ export default {
 			this.$axios.get('/api').then(data=>{
 				// console.log(data)
 			})
-		}
+		},
+		logout(){
+			this.$auth.logout().then(()=>{
+				this.$router.push('/login')
+			})
+		},
 	}
 };
 </script>

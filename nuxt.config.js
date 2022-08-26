@@ -46,7 +46,7 @@ module.exports = {
 		]
 	},
 	router: {
-		middleware: ['api']
+		middleware: ['authentication','api']
 	},
 	// Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
 	buildModules: [
@@ -65,11 +65,29 @@ module.exports = {
 		proxy: true, // Can be also an object with default options
 		baseURL: '/',
 		//baseURL: process.env.API_URL,
-		// baseURL: 'http://localhost:5500',
+		//baseURL: 'http://localhost:5500',
 
 	},
 
 
+	auth: {
+		strategies: {
+			local: {
+				endpoints: {
+					login: { url: "/api/auth", method: "post" },
+					logout: { url: "/api/logout", method: "post" },
+					user: { url: "/api/me", method: "get" }
+				}
+			},
+		},
+		redirect: {
+			login: "/",
+			logout: "/",
+			home: "/"
+		}
+	},
+
+	serverMiddleware: ["~/api"],
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
 	},
