@@ -142,7 +142,7 @@
                     "
                 >
                     <template v-slot:dialogHeader>
-                        <SearchBar placeholder="자격증명을 입력하세요." :keyword-data="keywordData" :value="keyword" @update:input="fnKeyword">
+                        <SearchBar placeholder="자격증1명을 입력하세요." :keyword-data="keywordData" :value="keyword" @update:input="fnKeyword">
                             <template v-slot:list>
                                 <SearchBarListItems
                                     v-for="(item, index) in keywordData"
