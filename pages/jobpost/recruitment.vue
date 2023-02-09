@@ -3,7 +3,19 @@
     <div class="jbCBoxing" data-fullpage="0">
         <div class="jbTits">모집분야</div>
         <div class="jbSTits">어떤 업무를 담당할 인재를 채용하시나요?</div>
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div v-for="i in 3" :key="i" class="swiper-slide" :class="`slide--${i}`">
+                    <div class="slider-content">Slide {{ i }}</div>
+                </div>
+            </div>
+            <!-- If pagination is needed -->
+            <div class="swiper-pagination"></div>
 
+            <!-- If navigation buttons are needed -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
         <!-- 모집분야 토글영역:S -->
         <div class="jbGlbNmAreaWrapping">
             <!-- 입력부분 확장시 show 클래스 추가 -->
@@ -38,7 +50,7 @@
                     <LayoutRowLayout title="경력여부" class="MT35" required>
                         <LayoutRow class="FLEX ALIGN_ITEM_CENTER">
                             <LayoutCol style="width: 100px">
-                                <FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_NEWCOMER(e.target.checked)" :checked="mzby_newcomer">신입</FormCheckbox>
+								<FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_NEWCOMER(e.target.checked)" :checked="mzby_newcomer">신입</FormCheckbox>
                             </LayoutCol>
                             <LayoutCol style="width: 100px">
                                 <FormCheckbox size="default" @update:change="(e) => SET_MOZIPBUNYA_CAREER(e.target.checked)" :checked="mzby_career">경력</FormCheckbox>
@@ -202,16 +214,50 @@ import {
     SET_JOBPOST_OBJECT_MERGE,
 } from "~/store/mutations-type";
 import { jobpost } from "~/mixins";
+// const { Swiper, Navigation, Pagination, Autoplay } = require('swiper')
+import "swiper/swiper-bundle.min.css";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
     name: "recruitment",
-	middleware: 'jobpost',
+    middleware: "jobpost",
+    // components: {
+    //     Swiper,
+    //     SwiperSlide,
+    // },
+    mounted() {
+        // configure Swiper to use modules. The modules were tested with SwiperJS v6.8.4 with NuxtJS v2.15.7
+        // previously it was before export default. Moved here for performance issues. Move back in case of problems.
+        // add or remove unused modules
+        console.log(this.$swiperModules);
+        this.swiper = new this.$swiper(".swiper", {
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            // configure Swiper to use modules
+
+            // modules: [this.$swiperModules.Navigation, this.$swiperModules.Pagination],
+        });
+        console.log(this.swiper);
+    },
     data() {
         return {
+            swiper: null,
             mzby_tooltip_isvisible: false,
             limitJcJgSelectedLength: 3,
             limitWoodaeSelectedLength: 6,
             isWoodaeDialogVisible: false,
+
+
+
+
+			test : true
         };
     },
     async asyncData({ $staticApi }) {
@@ -223,8 +269,6 @@ export default {
             mzby_jg,
             mzby_woodae,
         };
-    },
-    async mounted() {
     },
 
     computed: {
@@ -292,7 +336,7 @@ export default {
         },
         test() {
             // window.localStorage.setItem(
-			this.$cookies.set(
+            this.$cookies.set(
                 this.$options.name,
                 JSON.stringify({
                     mzby_title: this.mzby_title,
@@ -314,3 +358,38 @@ export default {
     layout: "default_jobpost",
 };
 </script>
+
+<style scoped>
+	.swiper {
+	  height: 300px;
+	  overflow: hidden;
+	  position: relative;
+	  width: 500px;
+	}
+	.swiper-slide {
+	  align-items: center;
+	  display: flex;
+	  justify-content: center;
+	}
+	.slider-content {
+	  color: #000;
+	}
+	.slide--1 {
+	  background-color: #f1c40f;
+	}
+	.slide--2 {
+	  background-color: #e67e22;
+	}
+	.slide--3 {
+	  background-color: #e74c3c;
+	}
+	.slide--4 {
+	  background-color: #9b59b6;
+	}
+	.slide--5 {
+	  background-color: #3498db;
+	}
+	.slide--6 {
+	  background-color: #2ecc71;
+	}
+	</style>
