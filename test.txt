@@ -4,3 +4,4 @@ pull branch dev1
 dev_test merge request
 dev_test merge request1
 dev_test merge request333
+dev_test merge request333_command
